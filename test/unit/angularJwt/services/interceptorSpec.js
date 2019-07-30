@@ -5,6 +5,7 @@ describe('interceptor', function() {
   beforeEach(function() {
     module('angular-jwt.interceptor');
     module('angular-jwt.options');
+    module('angular-jwt.headerCompression');
   });
 
   afterEach(inject(function($httpBackend) {

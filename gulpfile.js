@@ -1,5 +1,5 @@
 var gulp = require('gulp'),
-    karma = require('karma').server,
+    karma = require('karma'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
     rename = require('gulp-rename'),
@@ -21,38 +21,38 @@ gulp.task('build', function() {
  * Run test once and exit
  */
 gulp.task('test-src', function (done) {
-  karma.start({
+  new karma.Server({
     configFile: __dirname + '/karma-src.conf.js',
     singleRun: true
-  }, done);
+  }, done()).start();
 });
 
 gulp.task('test-debug', function (done) {
-  karma.start({
-    configFile: __dirname + '/karma-src.conf.js',
+  new karma.Server({
+    configFile: __dirname + '/karma-src-debug.conf.js',
     singleRun: false,
     autoWatch: true
-  }, done);
+  }, done()).start();
 });
 
 /**
  * Run test once and exit
  */
 gulp.task('test-dist-concatenated', function (done) {
-  karma.start({
+  new karma.Server({
     configFile: __dirname + '/karma-dist-concatenated.conf.js',
     singleRun: true
-  }, done);
+  }, done()).start();
 });
 
 /**
  * Run test once and exit
  */
 gulp.task('test-dist-minified', function (done) {
-  karma.start({
+  new karma({
     configFile: __dirname + '/karma-dist-minified.conf.js',
     singleRun: true
-  }, done);
+  }, done()).start();
 });
 
 gulp.task('default', ['test-src', 'build']);

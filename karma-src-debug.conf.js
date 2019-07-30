@@ -65,21 +65,21 @@ module.exports = function(config) {
     autoWatch: true,
 
     customLaunchers: {
-      ChromeHeadless: {
+      ChromeDebugging: {
         base: 'Chrome',
         flags: [
-          '--headless',
           '--disable-gpu',
           '--no-sandbox',
           // Without a remote debugging port, Google Chrome exits immediately.
           '--remote-debugging-port=9222'
-        ]
+        ],
+        debug: true
       }
     },
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['ChromeHeadless'],
+    browsers: ['ChromeDebugging'],
 
 
     // Continuous Integration mode

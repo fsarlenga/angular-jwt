@@ -3,6 +3,8 @@
 describe('jwt', function() {
 
   beforeEach(function() {
+    module('angular-jwt.options');
+    module('angular-jwt.headerCompression');
     module('angular-jwt.jwt');
   });
 

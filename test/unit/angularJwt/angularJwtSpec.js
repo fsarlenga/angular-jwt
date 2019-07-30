@@ -32,5 +32,9 @@ describe('Main Module', function() {
     expect(hasModule('angular-jwt.jwt')).to.be.ok;
   });
 
+  it('should load defaultCompression module', function() {
+    expect(hasModule('angular-jwt.headerCompression')).to.be.ok;
+  });
+
 
 });

@@ -4,7 +4,7 @@ angular.module('angular-jwt.options', [])
     this.config = function(value) {
       globalConfig = value;
     };
-    this.$get = function() {
+    this.$get = ['defaultCompression', function(defaultCompression) {
 
       var options = {
         urlParam: null,
@@ -18,7 +18,8 @@ angular.module('angular-jwt.options', [])
         unauthenticatedRedirectPath: '/',
         unauthenticatedRedirector: ['$location', function($location) {
           $location.path(this.unauthenticatedRedirectPath);
-        }]
+        }],
+        headerCompression: defaultCompression
       };
 
       function JwtOptions() {
@@ -30,5 +31,5 @@ angular.module('angular-jwt.options', [])
       };
 
       return new JwtOptions();
-    }
+    }]
   });

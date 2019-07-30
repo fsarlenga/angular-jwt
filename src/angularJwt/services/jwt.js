@@ -1,5 +1,5 @@
  angular.module('angular-jwt.jwt', [])
-  .service('jwtHelper', function($window) {
+  .service('jwtHelper', function($window, jwtOptions) {
 
     this.urlBase64Decode = function(str) {
       var output = str.replace(/-/g, '+').replace(/_/g, '/');
@@ -16,7 +16,9 @@
 
 
     this.decodeToken = function(token) {
-      var parts = token.split('.');
+      var config = jwtOptions.getConfig();
+      var decompToken = config.headerCompression ? config.headerCompression.decompress(token) : token;
+      var parts = decompToken.split('.');
 
       if (parts.length !== 3) {
         throw new Error('JWT must have 3 parts');

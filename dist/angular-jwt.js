@@ -11,7 +11,8 @@ angular.module('angular-jwt',
         'angular-jwt.options',
         'angular-jwt.interceptor',
         'angular-jwt.jwt',
-        'angular-jwt.authManager'
+        'angular-jwt.authManager',
+        'angular-jwt.headerCompression'
     ]);
 
 angular.module('angular-jwt.authManager', [])
@@ -213,7 +214,7 @@ angular.module('angular-jwt.interceptor', [])
   });
 
  angular.module('angular-jwt.jwt', [])
-  .service('jwtHelper', ["$window", function($window) {
+  .service('jwtHelper', ["$window", "jwOptions", function($window, jwOptions) {
 
     this.urlBase64Decode = function(str) {
       var output = str.replace(/-/g, '+').replace(/_/g, '/');
@@ -230,7 +231,9 @@ angular.module('angular-jwt.interceptor', [])
 
 
     this.decodeToken = function(token) {
-      var parts = token.split('.');
+      var config = jwtOptions.getConfig();
+      var decompToken = config.headerCompression ? config.headerCompression.decompress(token) : token;
+      var parts = decompToken.split('.');
 
       if (parts.length !== 3) {
         throw new Error('JWT must have 3 parts');
@@ -269,8 +272,16 @@ angular.module('angular-jwt.interceptor', [])
     };
   }]);
 
+angular.module('angular-jwt.headerCompression', [])
+  .service('defaultCompression', function() {
+
+    decompress(token)
+    {
+      return token;
+    }
+  });
 angular.module('angular-jwt.options', [])
-  .provider('jwtOptions', function() {
+  .provider('jwtOptions', ["defaultCompression", function(defaultCompression) {
     var globalConfig = {};
     this.config = function(value) {
       globalConfig = value;
@@ -289,7 +300,8 @@ angular.module('angular-jwt.options', [])
         unauthenticatedRedirectPath: '/',
         unauthenticatedRedirector: ['$location', function($location) {
           $location.path(this.unauthenticatedRedirectPath);
-        }]
+        }],
+        headerCompression: defaultCompression
       };
 
       function JwtOptions() {
@@ -302,7 +314,7 @@ angular.module('angular-jwt.options', [])
 
       return new JwtOptions();
     }
-  });
+  }]);
 
  /**
   * The content from this file was directly lifted from Angular. It is
